@@ -11,7 +11,7 @@ class SpaceStation(BaseModel):
     crew_size: int = Field(ge=1, le=20)
     power_level: float = Field(ge=0.0, le=100.0)
     oxygen_level: float = Field(ge=0.0, le=100.0)
-    last_maintenance: datetime
+    last_maintenance: datetime | str = Field(default=datetime.now())
     is_operational: bool = Field(default=True)
     notes: str | None = Field(default=None, max_length=200)
 
@@ -21,9 +21,8 @@ def main() -> None:
     Main function to demonstrate SpaceStation model validation.
     """
     print("Space Station Data Validation")
-    print("=" * 40)
+    print("========================================")
 
-    # Valid station creation
     try:
         valid_station = SpaceStation(
             station_id="ISS001",
@@ -31,7 +30,7 @@ def main() -> None:
             crew_size=6,
             power_level=85.5,
             oxygen_level=92.3,
-            last_maintenance="2024-03-15T10:30:00",  # type: ignore[arg-type]
+            last_maintenance="2024-03-15T10:30:00", 
             is_operational=True
         )
         print("Valid station created:")
@@ -43,11 +42,10 @@ def main() -> None:
         status = "Operational" if valid_station.is_operational else "Offline"
         print(f"Status: {status}")
     except ValidationError as e:
-        print(f"Unexpected validation error: {e}")
+        print(f"Unexpected validation error: {e.errors()[0]['msg']}")
     print()
-    print("=" * 40)
+    print("========================================")
 
-    # Invalid station creation (crew_size > 20)
     print("Expected validation error:")
     try:
         SpaceStation(
@@ -56,10 +54,9 @@ def main() -> None:
             crew_size=25,
             power_level=50.0,
             oxygen_level=50.0,
-            last_maintenance="2024-03-15T10:30:00"  # type: ignore[arg-type]
+            last_maintenance="2024-03-15T10:30:00"
         )
     except ValidationError as e:
-        # Print the first error message to match the subject's example
         print(e.errors()[0]['msg'])
 
 

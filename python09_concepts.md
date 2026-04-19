@@ -19,7 +19,6 @@ The `Field` function allows you to add specific constraints, metadata, and defau
 - **Constraints**: `gt`, `ge`, `lt`, `le` (for numbers), `min_length`, `max_length` (for strings/lists).
 - **Metadata**: `description`, `title`.
 - **Default**: `default`, `default_factory`.
-
 ```python
 from pydantic import BaseModel, Field
 
